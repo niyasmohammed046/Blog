@@ -305,6 +305,8 @@ header .container {
   gap: 5rem;
 }
 
+
+
 .card {
   background: white;
   box-shadow: var(--shadow2);
@@ -775,7 +777,7 @@ p span {
   align-items: center;
   gap:1rem;
   margin-top: 3rem;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr; 
 }
 
 .recent-post .learn {

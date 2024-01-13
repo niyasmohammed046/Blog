@@ -31,7 +31,7 @@
           <i class="fa-brands fa-blogger"></i>
         </div>
         <div class="links">
-          <a href="index.html">Home</a>
+          <a href="{% url 'home' %}">Home</a>
           <a href="pages/blog.html">Blog</a>
           <a href="pages/author.html">Author</a>
         </div>
@@ -107,6 +107,6 @@
         </div>
       </div>
     </footer>
-    <script src="url.js" id="url"></script>
+    <script src="{% static 'app/main.js' %}" id="url"></script>
   </body>
 </html>
