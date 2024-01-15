@@ -2,6 +2,23 @@ from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile_image = models.ImageField(null=True,upload_to="User Profile")
+    slug = models.SlugField(max_length=100,unique=True)
+    bio = models.CharField(max_length=200)
+
+    def save(self, *args , **kwargs): #this is to generate slug automatically
+        if not self.id:
+            self.slug = slugify(self.user.username)
+        return super(Profile,self).save(*args,**kwargs)
+    def __str__(self):
+        return self.user.first_name
+
+
+class Subscribe(models.Model):
+    email = models.EmailField(max_length=100)
+    date = models.DateTimeField(auto_now=True)
 
 
 class Tag(models.Model):
@@ -26,6 +43,8 @@ class Post(models.Model):
     image = models.ImageField(null=True,upload_to="Post Images")
     tags = models.ManyToManyField(Tag,blank=True,related_name='post')
     view_count = models.IntegerField(null=True,blank=True)
+    is_featured = models.BooleanField(default=False)
+    author = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
 
     def __str__(self):
         return self.title

@@ -1,5 +1,5 @@
 from django import forms
-from . models import Comments
+from . models import Comments ,Subscribe
 
 
 class CommentForm(forms.ModelForm):
@@ -17,3 +17,17 @@ class CommentForm(forms.ModelForm):
         self.fields['comment'].widget.attrs['placeholder'] = 'type your comments...'
         self.fields['name'].widget.attrs['placeholder'] = 'Enter Your Name'
         self.fields['email'].widget.attrs['placeholder'] = 'Enter Your Email'
+
+
+
+class SubscribeForm(forms.ModelForm):
+
+    email = forms.EmailField(max_length=100,label="",widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Enter Your Email'}))
+    class Meta:
+        model = Subscribe
+        fields = '__all__'
+    
+    # def __init__(self,*args,**kwars):
+    #     super().__init__(*args,**kwars)
+    #     self.fields['email'].widget.attrs['label'] = ''
+    #     self.fields['email'].widget.attrs['placeholder'] = 'Enter Your Email'

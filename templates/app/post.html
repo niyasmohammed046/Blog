@@ -10,7 +10,7 @@
             <div class="page-top">
               <div class="top flex">
                 <div class="page-name">
-                  <a href="#" class="learn">
+                  <a href="{% url 'home' %}" class="learn">
                     <span class="material-icons"> keyboard_return </span> Go
                     back
                   </a>
@@ -58,7 +58,9 @@
                     <div class="blog-tags"> 
 
                       {% for tag in post.tags.all %}
-                      <div class="tag">{{tag.name}}</div>
+                      <a href="{% url 'tag_page' tag.slug %}" class="tag">{{tag.name}}</a>
+                      {% empty %}
+                      <p>Nothing to show here...</p>
                       {% endfor %}
 
                     </div>
@@ -155,7 +157,8 @@
                             </p>
                           </div>
                         </div>
-
+                        {% empty %}
+                        <p>Nothing to show here...</p>
                         {% endfor %}
 
                       </div>
