@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %} Blog | Register{% endblock title %}
+
+{% block content %}
+
+<div class="container">
+    <div class="page-name">
+      <h1>Sign Up</h1>
+    </div>
+
+    <form method="post" action="{% url 'register' %}" class="form">
+        {% csrf_token %}
+      <center>
+        <div class="logo f-logo">
+          <i class="fa-brands fa-blogger"></i>
+        </div>
+        <div class="inputs">
+          <div>
+            <div class="search-bar s-active input">
+              {{form.first_name}}
+              <div class="animated-search">
+                <i class="uil uil-user"></i>
+              </div>
+            </div>
+            <div class="search-bar s-active input">
+              {{form.username}}
+              <div class="animated-search">
+                <i class="uil uil-user"></i>
+              </div>
+            </div>
+            {% comment %} <div class="field-error">
+              <p>Username already taken. Please try another one.</p>
+            </div> {% endcomment %}
+          </div>
+
+          <div>
+            <div class="search-bar s-active input">
+            {{form.email}}
+              <div class="animated-search">
+                <i class="uil uil-envelope-alt"></i>
+              </div>
+            </div>
+            {% comment %} <div class="field-error">
+              <p>Enter a valid email address</p>
+            </div> {% endcomment %}
+          </div>
+
+          <div>
+            <div class="search-bar s-active input">
+                {{form.password1}}
+              <div class="animated-search">
+                <i class="uil uil-key-skeleton"></i>
+              </div>
+            </div>
+            <div class="field-error">
+              {% comment %} <p>
+                This password is too short. It must need to contain at least
+                8 characters
+              </p> {% endcomment %}
+            </div>
+          </div>
+          <div>
+            <div class="search-bar s-active input">
+                {{form.password2}}
+              <div class="animated-search">
+                <i class="uil uil-key-skeleton"></i>
+              </div>
+            </div>
+            <div class="field-error">
+              {% comment %} <p>
+                This password is too short. It must need to contain at least
+                8 characters
+              </p> {% endcomment %}
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary rounded">
+            SIGN UP <span class="material-icons"> arrow_right_alt </span>
+          </button>
+          <center>
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+          </center>
+        </div>
+      </center>
+    </form>
+  </div>
+
+{% endblock content %}

@@ -22,7 +22,7 @@
             <center>
               <div class="typo">
                 <h1 class="title blog-title">
-                  {{post.title}}
+                  {{post.title|capfirst}}
                 </h1>
                 <div class="timeline">
                   <div class="track">
@@ -34,11 +34,20 @@
                     <p class="view-count">{{post.view_count}} view{{post.view_count|pluralize}}</p>
                   </div>
                   <div class="track">
-                    <form action="" method="POST">
+                    <form action="{% url 'bookmark' post.slug %}" method="POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="post_id" value={{post.id}}>
+                      {% if is_bookmarked %}
+                      <button type="submit" class="btn btn-info">
+                        <i class="fa-solid fa-bookmark"></i>
+                        <p class="bookmark">Remove Bookmark</p>
+                      </button>
+                      {% else %}
                       <button type="submit" class="btn btn-info">
                         <i class="uil uil-bookmark-full"></i>
                         <p class="bookmark">Bookmark</p>
                       </button>
+                      {% endif %}
                     </form>
                   </div>
                 </div>
@@ -53,7 +62,7 @@
                   </div>
                   <div class="blog-post-content">
                     <p>
-                      {{post.content}}
+                      {{post.content|safe}}
                     </p>
                     <div class="blog-tags"> 
 
@@ -67,7 +76,19 @@
                     <div class="social-share">
                       <div class="reactions">
                         <div class="likes">
-                          <i class="uil uil-heart"></i> <span>200</span>
+                          <form method="post" action="{% url 'like' post.slug %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="post_id" value="{{post.id}}">
+                            {% if post_is_liked %}
+                            <button type="submit">
+                              <i class="fa-solid fa-heart"></i> <span>{{like_count}}</span>
+                            </button>
+                            {% else %}
+                            <button type="submit">
+                              <i class="uil uil-heart"></i> <span> {{like_count}}</span>
+                            </button>
+                            {% endif %}
+                          </form>
                         </div>
                         <div class="total-comments">
                           <i class="uil uil-comment-alt"></i>
@@ -156,13 +177,12 @@
                               {{i.comment}}
                             </p>
                           </div>
-                        </div>
-                        {% empty %}
-                        <p>Nothing to show here...</p>
+                        </div>                      
                         {% endfor %}
-
                       </div>
                     </div>
+                    {% empty %}
+                    <p>Nothing to show here...</p>
                     {% endfor %}
                     <!-- user comment end -->
                   </div>
@@ -195,166 +215,81 @@
           <div class="right">
             <div class="block">
               <h2 class="title2">Most recent</h2>
+              {% for post in recent_posts %}
               <div class="recent-post">
                 <div class="rounded-img">
-                  <img src="../images/post.png" alt="" />
+                  <img src="{{post.image.url}}" alt="" />
                 </div>
                 <div class="recent-content">
                   <h3>
-                    A blog title and other stuffs will add here, also we can
-                    incluse.
+                    {{post.title|capfirst}}
                   </h3>
-                  <a class="learn" href="#"
+                  <a class="learn" href="{% url 'post_page' post.slug %}"
                     >Learn more
                     <span class="material-icons"> trending_flat </span></a
                   >
                 </div>
               </div>
-              <div class="recent-post">
-                <div class="rounded-img">
-                  <img src="../images/post.png" alt="" />
-                </div>
-                <div class="recent-content">
-                  <h3>
-                    A blog title and other stuffs will add here, also we can
-                    incluse.
-                  </h3>
-                  <a class="learn" href="#"
-                    >Learn more
-                    <span class="material-icons"> trending_flat </span></a
-                  >
-                </div>
-              </div>
-              <div class="recent-post">
-                <div class="rounded-img">
-                  <img src="../images/post.png" alt="" />
-                </div>
-                <div class="recent-content">
-                  <h3>
-                    A blog title and other stuffs will add here, also we can
-                    incluse.
-                  </h3>
-                  <a class="learn" href="#"
-                    >Learn more
-                    <span class="material-icons"> trending_flat </span></a
-                  >
-                </div>
-              </div>
+              {% endfor %}
             </div>
 
             <div class="block r-blog">
               <h2 class="title2">Related Blogs</h2>
               <!-- card -->
-              <a href="#">
+              {% for post in related_posts %}
+              <a href="{% url 'post_page' post.slug %}">
                 <div class="card">
                   <div class="post-img">
-                    <img src="../images/post.png" alt="" />
-                    <div class="tag">Tag name</div>
+                    <img src="{{post.image.url}}" alt="" />
+                    <div class="tag">{{post.tags.all.0.name}}</div>
                   </div>
                   <div class="card-content">
                     <h3>
-                      A blog title and other stuffs will add here, also we can
-                      include.
+                      {{post.title|capfirst}}
                     </h3>
                     <div class="author">
                       <div class="profile-pic">
-                        <img src="../images/author.svg" alt="" />
+                        <img src="{{post.author.profile.profile_image.url}}" alt="" />
                       </div>
                       <div class="details">
-                        <p>Author name</p>
-                        <small>June 20, 2022</small>
+                        <p>{{post.author.first_name}}</p>
+                        <small>{{post.last_updated|date}}</small>
                       </div>
                     </div>
                   </div>
                 </div>
               </a>
-              <!-- card end-->
-
-              <!-- card -->
-              <a href="#">
-                <div class="card">
-                  <div class="post-img">
-                    <img src="../images/post.png" alt="" />
-                    <div class="tag">Tag name</div>
-                  </div>
-                  <div class="card-content">
-                    <h3>
-                      A blog title and other stuffs will add here, also we can
-                      include.
-                    </h3>
-                    <div class="author">
-                      <div class="profile-pic">
-                        <img src="../images/author.svg" alt="" />
-                      </div>
-                      <div class="details">
-                        <p>Author name</p>
-                        <small>June 20, 2022</small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </a>
+              {% empty %}
+              <p>No related blogs</p>
+              <a class="learn" href="{% url 'all_posts' %}">View All Posts
+                <span class="material-icons"> trending_flat </span></a>
+              {% endfor %}
               <!-- card end-->
             </div>
             <div class="block">
-              <h2 class="title2">Top category</h2>
-              <div class="card">
-                <h3>
-                  A blog title and other stuffs will add here, lso we can
-                  incluse.
-                </h3>
-                <p>
-                  Lorem ipsum began as scrambled, nonsensical Latin derived from
-                  Cicero's 1st-century BC text De Finibus Bonorum et Malorum.
-                </p>
-                <a class="learn" href="#"
-                  >Learn more
-                  <span class="material-icons"> trending_flat </span></a
-                >
+              <h2 class="title2">Top Author</h2>
+              {% for author in top_authors %}
+              
+              <div class="recent-post">
+                <div class="rounded-img">
+                  <a href="{% url 'author_page' author.profile.slug %}"><img src="{{author.profile.profile_image.url}}" alt="" /></a>
+                </div>
+                <div class="recent-content">
+                  <h3>
+                    {{author.first_name|capfirst}}
+                  </h3>
+                  <a class="learn" href="{% url 'author_page' author.profile.slug %}" >learn more
+                    <span class="material-icons"> trending_flat </span></a>
+                </div>
               </div>
-              <div class="card">
-                <h3>
-                  A blog title and other stuffs will add here, lso we can
-                  incluse.
-                </h3>
-                <p>
-                  Lorem ipsum began as scrambled, nonsensical Latin derived from
-                  Cicero's 1st-century BC text De Finibus Bonorum et Malorum.
-                </p>
-                <a class="learn" href="#"
-                  >Learn more
-                  <span class="material-icons"> trending_flat </span></a
-                >
-              </div>
-              <div class="card">
-                <h3>
-                  A blog title and other stuffs will add here, lso we can
-                  incluse.
-                </h3>
-                <p>
-                  Lorem ipsum began as scrambled, nonsensical Latin derived from
-                  Cicero's 1st-century BC text De Finibus Bonorum et Malorum.
-                </p>
-                <a class="learn" href="#"
-                  >Learn more
-                  <span class="material-icons"> trending_flat </span></a
-                >
-              </div>
+              {% endfor %}
             </div>
             <div class="block">
               <h2 class="title2">Top Tags</h2>
               <div class="blog-tags">
-                <div class="tag">Tag</div>
-                <div class="tag">Tag content</div>
-                <div class="tag">Tag</div>
-                <div class="tag">Tag content</div>
-                <div class="tag">Tag content</div>
-                <div class="tag">Tag</div>
-                <div class="tag">Tag content</div>
-                <div class="tag">Tag content</div>
-                <div class="tag">Tag</div>
-                <div class="tag">Tag content</div>
-                <div class="tag">Tag</div>
+                {% for tag in tags %}
+                <a href="{% url 'tag_page' tag.slug %}" class="tag">{{tag}}</a>
+                {% endfor %}
               </div>
             </div>
           </div>

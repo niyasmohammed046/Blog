@@ -45,9 +45,15 @@ class Post(models.Model):
     view_count = models.IntegerField(null=True,blank=True)
     is_featured = models.BooleanField(default=False)
     author = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    bookmarks = models.ManyToManyField(User,related_name='bookmarks',default=None,blank=True)
+    likes = models.ManyToManyField(User,related_name='likes_count',default=None,blank=True)
+
+    def number_of_likes(self):
+        return self.likes.count()
 
     def __str__(self):
         return self.title
+
     
 
 class Comments(models.Model):
@@ -58,4 +64,10 @@ class Comments(models.Model):
     post = models.ForeignKey(Post,on_delete=models.CASCADE)
     auther = models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True) # this will change later
     comment_reply = models.ForeignKey('self', on_delete=models.DO_NOTHING ,null=True ,blank=True,related_name='replies') #this relate name is to get the all comment under one post, or else we need to use _set method
+
+
+class WebsiteMeta(models.Model):
+    title = models.CharField(max_length=100)
+    desc = models.CharField(max_length=500)
+    about = models.TextField()
 
