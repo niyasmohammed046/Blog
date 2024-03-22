@@ -1,6 +1,6 @@
-before runing make sure 
-1 - create your env
-2 - activate
-3 - run this command - <span> pip install -r requirements.txt </span>
-4 - make migrations
-5 - you are good to go
+before runing make sure  <br>
+1 - create your env <br>
+2 - activate <br>
+3 - run this command - <span> pip install -r requirements.txt </span> <br>
+4 - make migrations <br>
+5 - you are good to go <br>
