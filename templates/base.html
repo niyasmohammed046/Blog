@@ -54,15 +54,12 @@
       </div>
     </header>
     <main>
-      {% if messages %}
-      {% for message in messages %}
-      <div class="text-center">{{message}}</div>
-      {% endfor %}
-      {% endif %}
+      
     {% block content %}
 
 
     {% endblock content %}
+      
     </main>
 
 
