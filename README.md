@@ -1,6 +1,6 @@
-<h2>install this packages before running the server</h2>
-<br>
-asgiref==3.7.2 <br>
-Django==5.0.1 <br>
-pillow==10.2.0 <br>
-sqlparse==0.4.4 <br>
+before runing make sure 
+1 - create your env
+2 - activate
+3 - run this command - <span> pip install -r requirements.txt </span>
+4 - make migrations
+5 - you are good to go
