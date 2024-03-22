@@ -1,4 +1,4 @@
-<b> before running make sure </b> <br>
+<b> before running, make sure the following steps </b> <br>
 1 - create your env <br>
 2 - activate <br>
 3 - run this command - <span> pip install -r requirements.txt </span> <br>
